@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Подбор гриля Broil King за 3 вопроса</title>
+  <style>
+    :root{
+      --text:#111827;
+      --muted:rgba(17,24,39,.68);
+      --border:rgba(17,24,39,.12);
+      --radius:18px;
+
+      --accent:#0ea5e9;
+      --accent2:#6366f1;
+      --gold:#f59e0b;
+
+      --shadow1: 0 24px 90px rgba(245,158,11,.10);
+      --shadow2: 0 14px 40px rgba(17,24,39,.07);
+
+      --panelBg: rgba(255,255,255,.92);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      background:
+        radial-gradient(1050px 520px at 12% -10%, rgba(245,158,11,.22), transparent 60%),
+        radial-gradient(900px 520px at 92% 0%, rgba(14,165,233,.16), transparent 60%),
+        radial-gradient(900px 520px at 55% 115%, rgba(99,102,241,.10), transparent 60%),
+        linear-gradient(180deg, #ffffff 0%, #f7f9ff 44%, #f8fbff 100%);
+      color:var(--text);
+    }
+
+    .wrap{ max-width:980px; margin:0 auto; padding:28px 18px 46px; }
+
+    header{
+      position:relative;
+      display:flex;
+      gap:16px;
+      align-items:flex-start;
+      justify-content:space-between;
+      margin-bottom:18px;
+      padding:22px 20px;
+      border-radius:22px;
+      overflow:hidden;
+      background: rgba(255,255,255,.55);
+      backdrop-filter: blur(10px);
+    }
+
+    header::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background-image: url('69c3d3e6d0d2ebc7427780aa');
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.03);
+      opacity:.50;
+      filter: saturate(1.05) contrast(1.03);
+      pointer-events:none;
+    }
+
+    header::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      background: linear-gradient(90deg, rgba(255,255,255,.96) 0%, rgba(255,255,255,.76) 52%, rgba(255,255,255,.92) 100%);
+      pointer-events:none;
+    }
+
+    header > *{ position:relative; z-index:1; }
+
+    @media (max-width: 920px){ header{ padding:18px 14px; } }
+    .brand{ display:flex; flex-direction:column; gap:8px; min-width:260px; }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:7px 10px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.72);
+      border-radius:999px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 28px rgba(17,24,39,.06);
+      font-weight:900;
+      font-size:13px;
+      color: rgba(17,24,39,.74);
+    }
+
+    h1{ margin:0; font-size:28px; line-height:1.12; letter-spacing:-.02em; }
+    .subtitle{ margin:0; color:var(--muted); line-height:1.5; max-width:640px; font-size:15px; font-weight:650; }
+
+    .layout{ display:grid; grid-template-columns:360px 1fr; gap:18px; align-items:start; }
+    @media (max-width: 920px){ .layout{ grid-template-columns:1fr; } }
+
+    .side{ position:sticky; top:16px; }
+
+    .panel{
+      border:1px solid rgba(245,158,11,.18);
+      background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(250,252,255,.82));
+      border-radius:var(--radius);
+      box-shadow: var(--shadow1), var(--shadow2);
+      overflow:hidden;
+    }
+
+    .panel .pad{ padding:16px; }
+
+    .progressTop{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
+    .stepName{ font-size:14px; color:var(--muted); font-weight:750; }
+    .stepNum{
+      font-size:12px; padding:6px 10px; border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.78);
+      font-weight:900; color:var(--muted);
+    }
+
+    .bar{ height:10px; border-radius:999px; border:1px solid rgba(17,24,39,.14); background:rgba(17,24,39,.05); overflow:hidden; margin:2px 0 12px; }
+    .bar i{ display:block; height:100%; width:0%; background: linear-gradient(90deg, var(--gold), var(--accent2)); transition: width .35s ease; }
+
+    .mini{ margin-top:6px; display:flex; flex-direction:column; gap:10px; }
+    .mini .line{ display:flex; gap:10px; align-items:flex-start; color:var(--muted); font-size:13px; font-weight:700; line-height:1.4; }
+
+    .dot{ width:10px; height:10px; border-radius:50%; background:rgba(17,24,39,.10); border:1px solid rgba(17,24,39,.14); margin-top:4px; flex:0 0 auto; }
+    .dot.on{ background: rgba(245,158,11,.22); border-color: rgba(245,158,11,.55); box-shadow: 0 0 0 4px rgba(245,158,11,.12); }
+
+    main .card{ padding:18px; }
+
+    .qTitle{ margin:0 0 10px; font-size:18px; letter-spacing:-.01em; font-weight:900; }
+    .qHint{ margin:0 0 16px; color:var(--muted); font-size:14px; line-height:1.45; font-weight:650; }
+
+    .choices{ display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+
+    label.choice{
+      display:flex; gap:12px; align-items:flex-start;
+      padding:14px 14px;
+      border-radius:14px;
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.68);
+      cursor:pointer;
+      transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+      user-select:none;
+    }
+
+    label.choice:hover{
+      border-color: rgba(245,158,11,.45);
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 18px 40px rgba(17,24,39,.08);
+    }
+
+    label.choice input{ margin-top:3px; accent-color: var(--accent); transform: scale(1.1); }
+
+    .choiceText{ display:flex; flex-direction:column; gap:6px; }
+    .choiceText b{ font-weight:900; letter-spacing:-.01em; }
+    .choiceText span{ color:var(--muted); font-size:13px; line-height:1.35; font-weight:650; }
+
+    .actions{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:10px; flex-wrap:wrap; }
+    .btnRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
+    button{
+      border:1px solid rgba(17,24,39,.14);
+      background: rgba(255,255,255,.82);
+      color: var(--text);
+      padding:10px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:850;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease, opacity .2s ease;
+    }
+
+    button:hover{
+      border-color: rgba(245,158,11,.60);
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 14px 36px rgba(245,158,11,.18);
+    }
+
+    button:active{ transform: translateY(1px); }
+    button[disabled]{ opacity:.55; cursor:not-allowed; }
+
+    .primary{
+      background: linear-gradient(90deg, rgba(245,158,11,.26), rgba(99,102,241,.16));
+      border-color: rgba(245,158,11,.65);
+      box-shadow: 0 18px 44px rgba(245,158,11,.14);
+    }
+
+    .ghost{ background: rgba(255,255,255,.62); }
+
+    .resultWrap{ display:none; }
+
+    .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0; }
+    @media (max-width:760px){ .grid2{ grid-template-columns:1fr; } }
+
+    .stat{
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.70);
+      border-radius:14px;
+      padding:12px;
+    }
+    .stat .k{ color:var(--muted); font-size:13px; margin-bottom:8px; font-weight:750; }
+    .stat .v{ font-size:15px; font-weight:950; letter-spacing:-.01em; }
+
+    .recommend{
+      border:1px solid rgba(17,24,39,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.62));
+      border-radius:16px;
+      padding:14px;
+      margin-top:12px;
+    }
+
+    .recTitle{ margin:0 0 8px; font-size:16px; font-weight:950; }
+
+    ul.clean{ margin:0; padding-left:18px; color:var(--muted); line-height:1.5; font-size:14px; font-weight:650; }
+
+    .models{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .chip{
+      padding:9px 11px;
+      border-radius:999px;
+      border:1px solid rgba(17,24,39,.12);
+      background: rgba(255,255,255,.78);
+      color:var(--text);
+      font-weight:950;
+      font-size:13px;
+      box-shadow: 0 12px 26px rgba(17,24,39,.06);
+    }
+
+    .cta{ margin-top:14px; display:flex; flex-direction:column; gap:10px; }
+
+    .copyBox{ display:flex; gap:10px; align-items:stretch; flex-wrap:wrap; }
+    .textInput{
+      flex:1 1 260px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(17,24,39,.14);
+      background: rgba(255,255,255,.90);
+      color:var(--text);
+      outline:none;
+      font-weight:850;
+    }
+
+    .note{ font-size:12.5px; color:var(--muted); line-height:1.5; font-weight:650; }
+    .footerNote{ margin-top:18px; color: rgba(17,24,39,.50); font-size:12px; line-height:1.4; font-weight:650; }
+
+    .srOnly{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+    /* --- STEP 1 premium --- */
+    .step1Hero{
+      border-radius:16px;
+      padding:16px;
+      border:1px solid rgba(245,158,11,.22);
+      background:
+        radial-gradient(720px 140px at 15% 0%, rgba(245,158,11,.22), transparent 62%),
+        radial-gradient(520px 180px at 90% 0%, rgba(14,165,233,.14), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.95), rgba(250,252,255,.76));
+      box-shadow: 0 18px 54px rgba(245,158,11,.10);
+      margin-bottom:10px;
+    }
+
+    .premiumTopLine{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+
+    .premiumTag{
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(245,158,11,.42);
+      background: rgba(255,255,255,.74);
+      backdrop-filter: blur(10px);
+      font-weight:950;
+      letter-spacing:-.01em;
+      color: rgba(17,24,39,.78);
+      font-size:13px;
+    }
+
+    .premiumBadgeSub{ color: rgba(17,24,39,.52); font-size:12.5px; font-weight:850; }
+
+    .premiumTitle{
+      margin:0;
+      background: linear-gradient(90deg, rgba(245,158,11,1), rgba(14,165,233,.92), rgba(99,102,241,.95));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-shadow: 0 18px 38px rgba(245,158,11,.10);
+      font-size:20px;
+      line-height:1.2;
+      letter-spacing:-.01em;
+    }
+
+    .premiumTitle .qTitle{ margin:0; }
+
+    /* Inline promo button */
+    .inlineRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:6px 0 16px; }
+
+    .promoBtn{
+      border:1px solid rgba(245,158,11,.60);
+      background: linear-gradient(90deg, rgba(245,158,11,.20), rgba(14,165,233,.10));
+      color:var(--text);
+      position:relative;
+      overflow:hidden;
+      padding:10px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:950;
+      box-shadow: 0 18px 50px rgba(245,158,11,.20), 0 14px 34px rgba(14,165,233,.12);
+    }
+
+    .promoBtn::before{
+      content:'';
+      position:absolute;
+      inset:-6px;
+      background: radial-gradient(220px 70px at 20% 30%, rgba(245,158,11,.40), transparent 60%);
+      opacity:.65;
+      pointer-events:none;
+    }
+
+    .promoBtn::after{
+      content:'';
+      position:absolute;
+      inset:-120% -60% auto -60%;
+      height:220%;
+      transform: rotate(18deg);
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.72) 50%, transparent 100%);
+      animation: shimmer 2.8s ease-in-out infinite;
+      opacity:.72;
+      pointer-events:none;
+    }
+
+    @keyframes shimmer{
+      0%{ transform: translateX(-40%) rotate(18deg); }
+      55%{ transform: translateX(40%) rotate(18deg); }
+      100%{ transform: translateX(40%) rotate(18deg); }
+    }
+
+    .promoLink{
+      color:var(--text);
+      font-weight:950;
+      text-decoration:none;
+      border-bottom:1px dashed rgba(17,24,39,.35);
+      padding-bottom:2px;
+    }
+
+    .promoLink:hover{ border-bottom-style:solid; }
+
+    .promoDrop{ display:none; margin:10px 0 2px; border:1px solid rgba(17,24,39,.12); background: rgba(255,255,255,.78); border-radius:14px; padding:12px; }
+    .promoDrop.on{ display:block; }
+
+    .promoDrop .promoTitle{ margin:0 0 8px; font-weight:950; letter-spacing:-.01em; }
+
+    .promoList{ margin:0; padding:0; list-style:none; display:grid; grid-template-columns:1fr; gap:8px; }
+
+    .promoItem{ display:flex; justify-content:space-between; gap:12px; padding:10px 10px; border-radius:12px; background: rgba(255,255,255,.74); border: 1px solid rgba(17,24,39,.10); font-weight:900; }
+    .promoItem span:first-child{ color:var(--text); }
+    .promoItem span:last-child{ color:var(--muted); font-weight:950; }
+
+    .smallMuted{ color:var(--muted); font-size:12.5px; font-weight:650; line-height:1.4; }
+
+    .heroImage{
+      margin:10px 0 6px;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(17,24,39,.10);
+      background: rgba(255,255,255,.70);
+    }
+    .heroImage img{
+      display:block;
+      width:100%;
+      height:auto;
+    }
+
+    @media (max-width:520px){ .premiumTitle{ font-size:18px; } .heroImage{ margin:8px 0 4px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="badge">Быстрый подбор • Broil King • 3 вопроса</div>
+        <h1>Подбор гриля Broil King за 3 вопроса</h1>
+        <p class="subtitle">Не хотите тратить время на длинные обзоры и сравнение десятков характеристик? Есть более быстрый способ: отвечаете на 3 вопроса — и получаете подбор моделей, которые подходят под ваши условия.</p>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="side">
+        <div class="panel">
+          <div class="pad">
+            <div class="progressTop">
+              <div class="stepName" id="stepName">На сколько человек вы готовите чаще всего?</div>
+              <div class="stepNum" id="stepNum">1/3</div>
+            </div>
+            <div class="bar" aria-hidden="true"><i id="barFill"></i></div>
+            <div class="mini">
+              <div class="line"><span class="dot" id="dot1"></span>На сколько человек вы готовите чаще всего?</div>
+              <div class="line"><span class="dot" id="dot2"></span>Где будет стоять гриль?</div>
+              <div class="line"><span class="dot" id="dot3"></span>Какой бюджет комфортен?</div>
+            </div>
+            <div class="footerNote" style="margin-top:14px;">Цель: отсеять неподходящие варианты, подсветить модели под ваши сценарии и сэкономить время.</div>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+        <div class="panel card" id="quizPanel">
+          <!-- STEP 1 -->
+          <section id="step1">
+            <div class="step1Hero">
+              <h2 class="premiumTitle">На сколько человек вы готовите чаще всего?</h2>
+              <div class="heroImage">
+                <img src="69c3d3e6d0d2ebc7427780aa" alt="Гриль Broil King" />
+              </div>
+              <p class="qHint" style="margin:10px 0 0;">Выберите наиболее частый сценарий — от этого зависит нужный размер рабочей зоны и мощность.</p>
+            </div>
+
+            <div class="inlineRow">
+              <a class="promoBtn" href="https://mkitchen.ru/stock.html" target="_blank" rel="noreferrer" id="promoBtn">Модели по акции</a>
+              <a class="promoLink" href="https://mkitchen.ru/stock.html" target="_blank" rel="noreferrer">Все газовые грили BROIL KING</a>
+            </div>
+
+            <div class="choices" role="radiogroup" aria-labelledby="q1">
+              <label class="choice"><input type="radio" name="people" value="2-4" /><span class="choiceText"><b>2–4 человека</b><span>Компактный формат для семьи и небольшой компании.</span></span></label>
+
+              <label class="choice"><input type="radio" name="people" value="5-8" /><span class="choiceText"><b>5–8 человек</b><span>Универсальный вариант — хватает на встречи и посиделки.</span></span></label>
+
+              <label class="choice"><input type="radio" name="people" value="8+" /><span class="choiceText"><b>более 8 человек</b><span>Нужен запас по площади и одновременной готовке.</span></span></label>
+            </div>
+
+            <div class="actions">
+              <div class="btnRow"><button class="ghost" type="button" id="skip1">Пропустить</button></div>
+              <div class="btnRow"><button class="primary" type="button" id="next1">Далее</button></div>
+            </div>
+          </section>
+
+          <!-- STEP 2 -->
+          <section id="step2" style="display:none">
+            <h2 class="qTitle">Где будет стоять гриль?</h2>
+            <p class="qHint">Выберите место — под него подбирается удобство, практичность и габариты.</p>
+
+            <div class="choices" role="radiogroup" aria-labelledby="q2">
+              <label class="choice"><input type="radio" name="place" value="balcony" /><span class="choiceText"><b>на балконе</b><span>Компактнее и удобнее в управлении.</span></span></label>
+
+              <label class="choice"><input type="radio" name="place" value="privateyard" /><span class="choiceText"><b>во дворе частного дома</b><span>Можно брать больше мощности и функционала.</span></span></label>
+
+              <label class="choice"><input type="radio" name="place" value="terrace" /><span class="choiceText"><b>на террасе</b><span>Нужен баланс размера и удобства.</span></span></label>
+
+              <label class="choice"><input type="radio" name="place" value="gazebo" /><span class="choiceText"><b>в беседке / рядом с зоной отдыха</b><span>Учитывайте поток людей и частоту готовки.</span></span></label>
+            </div>
+
+            <div class="actions">
+              <div class="btnRow"><button class="ghost" type="button" id="back2">Назад</button><button class="ghost" type="button" id="skip2">Пропустить</button></div>
+              <div class="btnRow"><button class="primary" type="button" id="next2">Далее</button></div>
+            </div>
+          </section>
+
+          <!-- STEP 3 -->
+          <section id="step3" style="display:none">
+            <h2 class="qTitle">Какой бюджет комфортен?</h2>
+            <p class="qHint">Цены зависят от комплектации и сезона. Мы подбираем ориентир по классу гриля.</p>
+
+            <div class="choices" role="radiogroup" aria-labelledby="q3">
+              <label class="choice"><input type="radio" name="budget" value="upTo50" /><span class="choiceText"><b>до 50 000 руб.</b><span>Оптимально — компактные решения и стартовые модели.</span></span></label>
+
+              <label class="choice"><input type="radio" name="budget" value="50-100" /><span class="choiceText"><b>50 000–100 000 руб.</b><span>Золотая середина по мощности и удобству.</span></span></label>
+
+              <label class="choice"><input type="radio" name="budget" value="100-200" /><span class="choiceText"><b>100 000–200 000 руб.</b><span>Запас по площади, стабильности и комплектации.</span></span></label>
+
+              <label class="choice"><input type="radio" name="budget" value="over200" /><span class="choiceText"><b>более 200 000 руб.</b><span>Можно рассматривать максимум серии — например: <b>Broil King IMPERIAL 690 IR ЧЕРНЫЙ</b>.</span></span></label>
+            </div>
+
+            <div class="actions">
+              <div class="btnRow"><button class="ghost" type="button" id="back3">Назад</button><button class="ghost" type="button" id="skip3">Пропустить</button></div>
+              <div class="btnRow"><button class="primary" type="button" id="finish">Показать рекомендацию</button></div>
+            </div>
+          </section>
+
+          <!-- RESULT -->
+          <section class="resultWrap" id="result">
+            <h2 class="qTitle">Подбор под ваши ответы</h2>
+            <p class="qHint" id="resultSub">Ниже — модели/серии, на которые стоит обратить внимание в первую очередь.</p>
+
+            <div class="grid2">
+              <div class="stat"><div class="k">Частый формат</div><div class="v" id="rPeople">—</div></div>
+              <div class="stat"><div class="k">Место установки</div><div class="v" id="rPlace">—</div></div>
+              <div class="stat"><div class="k">Бюджет</div><div class="v" id="rBudget">—</div></div>
+              <div class="stat"><div class="k">Ориентир по мощности</div><div class="v" id="rPower">—</div></div>
+            </div>
+
+            <div class="recommend">
+              <p class="recTitle"><b>Что стоит рассмотреть</b></p>
+              <div class="models" id="models"></div>
+              <ul class="clean" id="why"></ul>
+
+              <div class="note" style="margin-top:10px;">
+                Для апрельского вечера у гриля — обратите внимание на рецепт:
+                <a class="promoLink" href="https://mkitchen.ru/kopiya-steyki-kukuruza-i-ovoshchi.html" target="_blank" rel="noreferrer">
+                  стейки, кукуруза и овощи
+                </a>
+              </div>
+            </div>
+
+            <div class="cta">
+              <p class="qHint" style="margin:0">Хотите быстрый подбор? Отправьте ответы на 3 вопроса — и мы подскажем, какой вариант стоит рассмотреть в первую очередь!</p>
+              <div class="copyBox">
+                <label class="srOnly" for="copyText">Текст для отправки</label>
+                <input class="textInput" id="copyText" type="text" readonly />
+                <button class="primary" type="button" id="copyBtn">Скопировать</button>
+              </div>
+              <div class="note">Просто напишите в одном сообщении: «[число человек], [место установки], [бюджет]» — и получите персональную рекомендацию.</div>
+              <div class="btnRow" style="justify-content:flex-start; margin-top:2px;"><button class="ghost" type="button" id="restart">Начать заново</button></div>
+            </div>
+          </section>
+        </div>
+
+        <div class="footerNote" style="text-align:center; margin-top:12px;">Ориентиры в рекомендациях зависят от комплектации и наличия. Если сомневаетесь между двумя вариантами — выбирайте с запасом по площади.</div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const state = { people:null, place:null, budget:null };
+    const $ = (id) => document.getElementById(id);
+
+    const steps = [
+      { el: $('step1'), name: 'На сколько человек вы готовите чаще всего?', num: '1/3', bar: 34, dot: 'dot1' },
+      { el: $('step2'), name: 'Шаг 2 из 3', num: '2/3', bar: 67, dot: 'dot2' },
+      { el: $('step3'), name: 'Шаг 3 из 3', num: '3/3', bar: 100, dot: 'dot3' }
+    ];
+
+    let stepIndex = 0;
+
+    function setDots(active){
+      ['dot1','dot2','dot3'].forEach(d => $(d).classList.remove('on'));
+      if(active === 0) $('dot1').classList.add('on');
+      if(active === 1) $('dot1').classList.add('on'), $('dot2').classList.add('on');
+      if(active === 2) ['dot1','dot2','dot3'].forEach(d => $(d).classList.add('on'));
+    }
+
+    function showStep(idx){
+      stepIndex = idx;
+      $('result').style.display = 'none';
+      steps.forEach((s,i) => { s.el.style.display = i === idx ? 'block' : 'none'; });
+      $('stepName').textContent = steps[idx].name;
+      $('stepNum').textContent = steps[idx].num;
+      $('barFill').style.width = steps[idx].bar + '%';
+      setDots(idx);
+    }
+
+    function getSelected(name){
+      const el = document.querySelector(`input[name="${name}"]:checked`);
+      return el ? el.value : null;
+    }
+
+    function skipToNext(name){
+      state[name] = getSelected(name);
+      showStep(stepIndex + 1);
+    }
+
+    function nextFromCurrent(name){
+      const val = getSelected(name);
+      if(!val){
+        alert('Выберите вариант, чтобы продолжить.');
+        return;
+      }
+      state[name] = val;
+      showStep(stepIndex + 1);
+    }
+
+    function peopleLabel(v){
+      if(v === '2-4') return '2–4 человека';
+      if(v === '5-8') return '5–8 человек';
+      if(v === '8+') return 'более 8 человек';
+      return '—';
+    }
+
+    function placeLabel(v){
+      if(v === 'balcony') return 'на балконе';
+      if(v === 'privateyard') return 'во дворе частного дома';
+      if(v === 'terrace') return 'на террасе';
+      if(v === 'gazebo') return 'в беседке / рядом с зоной отдыха';
+      return '—';
+    }
+
+    function budgetLabel(v){
+      if(v === 'upTo50') return 'до 50 000 руб.';
+      if(v === '50-100') return '50 000–100 000 руб.';
+      if(v === '100-200') return '100 000–200 000 руб.';
+      if(v === 'over200') return 'более 200 000 руб.';
+      return '—';
+    }
+
+    function powerHint(){
+      if(state.people === '2-4') return '2–3 горелки / компактный формат';
+      if(state.people === '5-8') return '3–4 горелки / универсальный размер';
+      if(state.people === '8+') return '4–5+ горелок / нужен запас по площади';
+      return 'ориентир по размеру';
+    }
+
+    function uniq(arr){
+      const out = [];
+      const seen = new Set();
+      for(const t of arr){
+        const k = (t||'').trim();
+        if(!k || seen.has(k)) continue;
+        seen.add(k);
+        out.push(k);
+      }
+      return out;
+    }
+
+    function recommendModels(){
+      const budget = state.budget;
+      const people = state.people;
+      const place = state.place;
+
+      const safePeople = people || '5-8';
+      const safeBudget = budget || '50-100';
+      const safePlace = place || 'terrace';
+
+      const models = [];
+      const why = [];
+
+      const isBalcony = safePlace === 'balcony';
+
+      if(safeBudget === 'upTo50'){
+        why.push('Стартовый бюджет — лучше начать с компактной конфигурации без переплаты за лишнюю площадь.');
+        if(safePeople === '2-4'){
+          models.push('Broil King PORTA-CHEF 320 МОБИЛЬНЫЙ');
+          models.push('Broil King GEM 310 ЧЕРНЫЙ');
+          why.push('Хватит для семейных готовок — без “запаса впритык”.');
+        } else if(safePeople === '5-8'){
+          models.push('Broil King SIGNET 390');
+          models.push('Broil King ROYAL 340');
+          why.push('Нужна достаточная рабочая зона, чтобы готовить без постоянной очередности.');
+        } else {
+          models.push('Обычно лучше смотреть бюджет 100 000–200 000 руб. (для >8 человек чаще нужен запас)');
+          models.push('Broil King BARON 490 ЧЕРНЫЙ');
+          why.push('Для большой компании важно не экономить “на метраже”.');
+        }
+      }
+
+      if(safeBudget === '50-100'){
+        why.push('Средний бюджет — удачный баланс мощности, удобства и ресурса.');
+        if(safePeople === '2-4'){
+          models.push('Broil King SIGNET 390');
+          models.push('Broil King ROYAL 340');
+          why.push('Компактнее и стабильнее для регулярных домашних сценариев.');
+        } else if(safePeople === '5-8'){
+          models.push('Broil King BARON 490 ЧЕРНЫЙ');
+          models.push('Broil King CROWN 490 ЧЕРНЫЙ');
+          why.push('Оптимально для встреч: достаточно площади и равномерности.');
+        } else {
+          models.push('Ориентир: Broil King REGAL 490');
+          models.push('Broil King BARON S 490 IR');
+          why.push('Для больших компаний нужен уверенный запас по мощности и одновременной готовке.');
+        }
+      }
+
+      if(safeBudget === '100-200'){
+        why.push('Промежуточный премиум — чаще всего лучший класс по соотношению “хватит и не переплатить”.');
+        if(safePeople === '2-4'){
+          models.push('Broil King REGAL S 490 IR');
+          models.push('Broil King REGAL 490');
+          why.push('Берёте с запасом: удобно готовить несколько блюд и держать нужные температуры.');
+        } else if(safePeople === '5-8'){
+          models.push('Broil King REGAL S 590 IR');
+          models.push('Broil King REGAL 490 IR / Q 490 IR');
+          why.push('Для 5–8 человек важна рабочая зона и стабильность нагрева.');
+        } else {
+          models.push('Broil King REGAL Q 490 IR ЧЕРНЫЙ');
+          models.push('Ориентир: Broil King IMPERIAL S 690 IR (если нужен максимум)');
+          why.push('Для >8 лучше сразу планировать запас по площади — так проще “закрывать” весь сет.');
+        }
+      }
+
+      if(safeBudget === 'over200'){
+        why.push('Максимальный бюджет — можно брать максимум комфорта: больше площади, меньше компромиссов.');
+        if(safePeople === '2-4'){
+          models.push('Broil King IMPERIAL 690 IR ЧЕРНЫЙ');
+          models.push('Broil King IMPERIAL S 690 IR');
+          why.push('Даже для небольшой компании это даёт максимум удобства и скорости.');
+        } else if(safePeople === '5-8'){
+          models.push('Broil King IMPERIAL S 690 IR');
+          models.push('Broil King IMPERIAL 690 IR ЧЕРНЫЙ');
+          why.push('Для встреч это помогает готовить “в темпе” и не снижать качество из-за очереди.');
+        } else {
+          models.push('Broil King IMPERIAL 690 IR ЧЕРНЫЙ');
+          models.push('Broil King IMPERIAL S 690 IR');
+          why.push('Для более 8 человек проще сделать большой сет за один заход и уверенно держать температуры.');
+        }
+      }
+
+      if(isBalcony){
+        why.unshift('Если гриль будет стоять на балконе, приоритизируйте компактность и удобство размещения.');
+        if(safePeople === '8+' && (safeBudget === 'upTo50' || safeBudget === '50-100')){
+          why.push('На балконе большой формат может быть тесен — лучше пересмотреть бюджет/место установки.');
+        }
+      }
+
+      if(safePlace === 'privateyard' || safePlace === 'gazebo'){
+        why.push('Во дворе/в беседке проще раскрыть возможности по мощности — часто можно брать модель с запасом по площади.');
+      }
+
+      if(safePlace === 'terrace'){
+        why.push('На террасе важен баланс: не слишком компактно и не слишком громоздко.');
+      }
+
+      return { models: uniq(models).slice(0,4), why: uniq(why) };
+    }
+
+    function buildCopyText(){
+      const p = state.people ? peopleLabel(state.people).replace(' человека','') : '[число человек]';
+      const pl = state.place ? placeLabel(state.place) : '[место установки]';
+      const b = state.budget ? budgetLabel(state.budget) : '[бюджет]';
+      return `${p}, ${pl}, ${b}`;
+    }
+
+    function finish(){
+      state.people = getSelected('people');
+      state.place = getSelected('place');
+      state.budget = getSelected('budget');
+
+      $('rPeople').textContent = peopleLabel(state.people);
+      $('rPlace').textContent = placeLabel(state.place);
+      $('rBudget').textContent = budgetLabel(state.budget);
+      $('rPower').textContent = powerHint();
+
+      const rec = recommendModels();
+
+      const modelsEl = $('models');
+      modelsEl.innerHTML = '';
+      rec.models.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'chip';
+        div.textContent = m;
+        modelsEl.appendChild(div);
+      });
+
+      const whyEl = $('why');
+      whyEl.innerHTML = '';
+      rec.why.forEach(t => {
+        const li = document.createElement('li');
+        li.textContent = t;
+        whyEl.appendChild(li);
+      });
+
+      $('copyText').value = buildCopyText();
+
+      $('step1').style.display = 'none';
+      $('step2').style.display = 'none';
+      $('step3').style.display = 'none';
+      $('result').style.display = 'block';
+
+      $('stepName').textContent = 'Готово';
+      $('stepNum').textContent = '3/3';
+      ['dot1','dot2','dot3'].forEach(d => $(d).classList.add('on'));
+      $('barFill').style.width = '100%';
+    }
+
+    // Inline recipe portions calculator (апрельский гриль-вечер)
+    (function initInlinePortionsCalc(){
+      const BASE_SERVINGS = 6;
+      const recipeIngredientsBase = [
+        { name: 'Говяжьи ребра', value: 1400, unit: 'г', kind: 'mass' },
+        { name: 'Соль', value: 18, unit: 'г', kind: 'mass' },
+        { name: 'Молотый черный перец', value: 3, unit: 'г', kind: 'mass' },
+        { name: 'Чеснок', value: 4, unit: 'зубчика', kind: 'count' },
+        { name: 'Имбирь (свежий)', value: 20, unit: 'г', kind: 'mass' },
+        { name: 'Абрикосовый джем', value: 260, unit: 'г', kind: 'mass' },
+        { name: 'Мёд', value: 70, unit: 'мл', kind: 'mass' },
+        { name: 'Соевый соус', value: 70, unit: 'мл', kind: 'mass' },
+        { name: 'Лайм (сок)', value: 35, unit: 'мл', kind: 'mass' },
+        { name: 'Уксус рисовый (по желанию)', value: 12, unit: 'мл', kind: 'mass' },
+        { name: 'Оливковое масло', value: 35, unit: 'мл', kind: 'mass' },
+        { name: 'Розмарин', value: 6, unit: 'веточек', kind: 'count' },
+        { name: 'Спаржа', value: 3, unit: 'пучка', kind: 'count' },
+        { name: 'Соль для спаржи', value: 2, unit: 'г', kind: 'mass' },
+        { name: 'Редис', value: 700, unit: 'г', kind: 'mass' },
+        { name: 'Огурец', value: 2, unit: 'шт.', kind: 'count' },
+        { name: 'Оливковое масло для салата', value: 30, unit: 'мл', kind: 'mass' },
+        { name: 'Сок лайма для салата', value: 25, unit: 'мл', kind: 'mass' }
+      ];
+
+      const linkHref = 'https://mkitchen.ru/kopiya-steyki-kukuruza-i-ovoshchi.html';
+      const recipeLink = document.querySelector(`a.promoLink[href="${linkHref}"]`);
+      if(!recipeLink) return;
+
+      // Avoid duplicates if script reruns
+      if(document.getElementById('calcInlineBtn')) return;
+
+      const note = recipeLink.closest('.note');
+      if(!note) return;
+
+      const inlineRow = document.createElement('div');
+      inlineRow.className = 'inlineRow';
+      inlineRow.style.margin = '10px 0 0';
+
+      const btn = document.createElement('button');
+      btn.className = 'promoBtn';
+      btn.type = 'button';
+      btn.id = 'calcInlineBtn';
+      btn.textContent = 'Рассчитать порции и ингредиенты';
+
+      inlineRow.appendChild(btn);
+
+      const panel = document.createElement('div');
+      panel.className = 'promoDrop';
+      panel.id = 'calcPanel';
+
+      panel.innerHTML = `
+        <p class="promoTitle">Ингредиенты по рецепту (база — 6 порций)</p>
+
+        <div class="copyBox" style="margin-top:10px;">
+          <label class="smallMuted" for="servingsInput" style="display:flex; align-items:center; gap:8px;">
+            <span>Сколько человек:</span>
+          </label>
+          <input class="textInput" id="servingsInput" type="number" min="1" max="20" step="1" value="4" />
+          <button class="ghost" type="button" id="calcRecalcBtn">Пересчитать</button>
+        </div>
+
+        <div class="footerNote" id="calcHeader" style="margin-top:10px; text-align:left;"></div>
+
+        <ul class="clean" id="ingredientsList"></ul>
+
+        <div class="smallMuted" style="margin-top:10px;">
+          Порции указаны ориентировочно: некоторые позиции зависят от размера продуктов.
+        </div>
+      `;
+
+      note.appendChild(inlineRow);
+      note.appendChild(panel);
+
+      function fmtMass(v){
+        const r = Math.round(v);
+        if(Math.abs(v - r) < 0.05) return String(r);
+        const one = Number(v.toFixed(1));
+        return String(one).replace(/\.0$/,'');
+      }
+
+      function fmtCount(v){
+        const r = Math.max(1, Math.round(v));
+        return String(r);
+      }
+
+      function getServings(){
+        const inp = document.getElementById('servingsInput');
+        const v = Number(inp ? inp.value : BASE_SERVINGS);
+        return Number.isFinite(v) && v > 0 ? v : BASE_SERVINGS;
+      }
+
+      function renderRecipeFor(servings){
+        const s = getServings(servings);
+        const safeS = Number.isFinite(s) && s > 0 ? s : BASE_SERVINGS;
+
+        const header = document.getElementById('calcHeader');
+        const listEl = document.getElementById('ingredientsList');
+        if(!header || !listEl) return;
+
+        header.textContent = `Сейчас рассчитано на ${safeS} порций (×${(safeS/BASE_SERVINGS).toFixed(2)} от базы).`;
+
+        listEl.innerHTML = '';
+
+        recipeIngredientsBase.forEach(ing => {
+          const scaled = ing.value * safeS / BASE_SERVINGS;
+          const qty = ing.kind === 'count' ? fmtCount(scaled) : fmtMass(scaled);
+          const li = document.createElement('li');
+          li.textContent = `${ing.name} — ${qty} ${ing.unit}`;
+          listEl.appendChild(li);
+        });
+      }
+
+      btn.addEventListener('click', () => {
+        const isOpen = panel.classList.contains('on');
+        if(isOpen){
+          panel.classList.remove('on');
+          return;
+        }
+        panel.classList.add('on');
+        renderRecipeFor();
+      });
+
+      panel.addEventListener('click', (e) => {
+        const t = e.target;
+        if(t && t.id === 'calcRecalcBtn'){
+          renderRecipeFor();
+        }
+      });
+
+      const input = document.getElementById('servingsInput');
+      if(input){
+        input.addEventListener('input', () => {
+          if(panel.classList.contains('on')) renderRecipeFor();
+        });
+      }
+    })();
+
+    // Events
+    $('next1').addEventListener('click', () => nextFromCurrent('people'));
+    $('next2').addEventListener('click', () => nextFromCurrent('place'));
+    $('finish').addEventListener('click', () => {
+      const budgetSel = getSelected('budget');
+      if(!budgetSel){ alert('Выберите бюджет, чтобы получить рекомендацию.'); return; }
+      finish();
+    });
+
+    $('back2').addEventListener('click', () => showStep(0));
+    $('back3').addEventListener('click', () => showStep(1));
+
+    $('skip1').addEventListener('click', () => skipToNext('people'));
+    $('skip2').addEventListener('click', () => skipToNext('place'));
+    $('skip3').addEventListener('click', () => {
+      const budgetSel = getSelected('budget');
+      state.people = getSelected('people');
+      state.place = getSelected('place');
+      state.budget = budgetSel;
+      if(!budgetSel){ alert('Чтобы показать рекомендацию, выберите бюджет или заполните его в следующий раз.'); return; }
+      finish();
+    });
+
+    $('restart').addEventListener('click', () => {
+      document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+      state.people = null; state.place = null; state.budget = null;
+      $('result').style.display = 'none';
+      showStep(0);
+    });
+
+    $('copyBtn').addEventListener('click', async () => {
+      const text = $('copyText').value;
+      try{
+        await navigator.clipboard.writeText(text);
+        $('copyBtn').textContent = 'Скопировано';
+        setTimeout(() => $('copyBtn').textContent = 'Скопировать', 1300);
+      }catch(e){
+        $('copyText').focus();
+        $('copyText').select();
+        document.execCommand('copy');
+        $('copyBtn').textContent = 'Скопировано';
+        setTimeout(() => $('copyBtn').textContent = 'Скопировать', 1300);
+      }
+    });
+
+    // Init
+    showStep(0);
+  </script>
+<script>window.parent.postMessage({ action: "ready" }, "*"); 
+ 
+window.console = new Proxy(console, {
+  get(target, prop) {
+    if (['log', 'warn', 'error'].includes(prop)) {
+      return new Proxy(target[prop], {
+        apply(fn, thisArg, args) {
+          fn.apply(thisArg, args);
+          window.parent.postMessage({ action: 'console', 
+            type: prop, 
+            args: args.map((arg) => {
+              try {
+                return JSON.stringify(arg).replace(/^["']|["']$/g, '');
+              } catch (e) {
+                return arg;
+              }
+            }) 
+          }, '*');
+        }
+      });
+    }
+    return target[prop];
+  }
+});
+</script></body>
+</html>
